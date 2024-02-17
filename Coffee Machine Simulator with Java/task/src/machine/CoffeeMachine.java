@@ -24,40 +24,68 @@ public class CoffeeMachine {
 			coffeeMachine.takeAction(coffeeMachine.takeActionChoice());
 
 		}
-
 	}
 
 	public CoffeeMachine() {
-		this.water_level = 400;
-		this.milk_level = 540;
-		this.bean_count = 120;
-		this.cup_count = 9;
-		this.money = 550;
+		setWater_level(400);
+		setMilk_level(540);
+		setBean_count(120);
+		setCup_count(9);
+		setMoney(550);
 	}
 
-	private void calculateIngredients() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Write how many cups of coffee you will need:");
-		int cups = scanner.nextInt();
-		int water = 200 * cups;
-		int milk = 50 * cups;
-		int beans = 15 * cups;
-		System.out.println("For " + cups + " cups of coffee you will need:");
-		System.out.println(water + " ml of water");
-		System.out.println(milk + " ml of milk");
-		System.out.println(beans + " g of coffee beans");
+	public int getWater_level() {
+		return water_level;
 	}
+
+	public void setWater_level(int water_level) {
+		this.water_level = water_level;
+	}
+
+	public int getMilk_level() {
+		return milk_level;
+	}
+
+	public void setMilk_level(int milk_level) {
+		this.milk_level = milk_level;
+	}
+
+	public int getBean_count() {
+		return bean_count;
+	}
+
+	public void setBean_count(int bean_count) {
+		this.bean_count = bean_count;
+	}
+
+	public int getCup_count() {
+		return cup_count;
+	}
+
+	public void setCup_count(int cup_count) {
+		this.cup_count = cup_count;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
+
+	// ...
 
 	private void setInventory() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Write how many ml of water you want to add:");
-		this.water_level += scanner.nextInt();
+		setWater_level(getWater_level() + scanner.nextInt());
 		System.out.println("Write how many ml of milk you want to add:");
-		this.milk_level += scanner.nextInt();
+		setMilk_level(getMilk_level() + scanner.nextInt());
 		System.out.println("Write how many grams of coffee beans  you want to add:");
-		this.bean_count += scanner.nextInt();
+		setBean_count(getBean_count() + scanner.nextInt());
 		System.out.println("Write how many disposable cups you want to add:");
-		this.cup_count += scanner.nextInt();
+		setCup_count(getCup_count() + scanner.nextInt());
 		System.out.println("\n");
 	}
 
@@ -72,8 +100,8 @@ public class CoffeeMachine {
 				setInventory();
 				break;
 			case "take":
-				System.out.println("I gave you $" + this.money + "\n");
-				this.money = 0;
+				System.out.println("I gave you $" + getMoney() + "\n");
+				setMoney(0);
 				break;
 			case "remaining":
 				System.out.println();
@@ -108,8 +136,7 @@ public class CoffeeMachine {
 		} catch (NumberFormatException e) {
 			if (input.equals("back")) {
 				return 4;
-			}
-			else {
+			} else {
 				System.out.println("Invalid input.");
 			}
 		}
@@ -152,17 +179,17 @@ public class CoffeeMachine {
 			this.cup_count--;
 			this.money += coffee.getCost();
 
-			System.out.println("I have enough resources, making you a coffee!\n");
-		} else if (this.water_level < coffee.getWater()) {
+			System.out.println("I have enough resources, making you a coffee!");
+		} else if (getWater_level() < coffee.getWater()) {
 			System.out.println("Sorry, not enough water!");
-		} else if (this.milk_level < coffee.getMilk()) {
+		} else if (getMilk_level() < coffee.getMilk()) {
 			System.out.println("Sorry, not enough milk!");
-		} else if (this.bean_count < coffee.getBeans()) {
+		} else if (getBean_count() < coffee.getBeans()) {
 			System.out.println("Sorry, not enough coffee beans!");
-		} else if (this.cup_count == 0) {
+		} else if (getCup_count() == 0) {
 			System.out.println("Sorry, not enough disposable cups!");
-
 		}
+		System.out.println();
 	}
 
 	private void checkSuppliesForRequest() {
