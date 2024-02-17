@@ -9,6 +9,7 @@ public class CoffeeMachine {
 	static Coffee espresso = new Coffee(250, 0, 16, 4);
 	static Coffee latte = new Coffee(350, 75, 20, 7);
 	static Coffee cappuccino = new Coffee(200, 100, 12, 6);
+	static boolean isRunning = true;
 
 	private int water_level;
 	private int milk_level;
@@ -18,15 +19,11 @@ public class CoffeeMachine {
 
 	public static void main(String[] args) {
 		CoffeeMachine coffeeMachine = new CoffeeMachine();
-		// coffeeMachine.printSteps();
-//		coffeeMachine.setInventory();
-//		coffeeMachine.checkSuppliesForRequest();
+		while (isRunning) {
+			coffeeMachine.displayActions();
+			coffeeMachine.takeAction(coffeeMachine.takeActionChoice());
 
-		coffeeMachine.printSupplies();
-		coffeeMachine.displayActions();
-		coffeeMachine.takeAction(coffeeMachine.takeActionChoice());
-		coffeeMachine.printSupplies();
-
+		}
 
 	}
 
@@ -65,7 +62,6 @@ public class CoffeeMachine {
 	}
 
 
-
 	private void takeAction(String action) {
 		switch (action) {
 			case "buy":
@@ -76,16 +72,23 @@ public class CoffeeMachine {
 				setInventory();
 				break;
 			case "take":
-				System.out.println("I gave you $" + this.money+"\n");
+				System.out.println("I gave you $" + this.money + "\n");
 				this.money = 0;
 				break;
+			case "remaining":
+				System.out.println();
+				printSupplies();
+				break;
+			case "exit":
+				isRunning = false;
+				return;
 			default:
 				break;
 		}
 	}
 
 	private void displayActions() {
-		System.out.println("Write action (buy, fill, take):");
+		System.out.println("Write action (buy, fill, take, remaining, exit):");
 	}
 
 	private String takeActionChoice() {
@@ -94,12 +97,23 @@ public class CoffeeMachine {
 	}
 
 	private void displayBuyOptions() {
-		System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+		System.out.println("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
 	}
 
 	private int takeBuyOptions() {
 		Scanner scanner = new Scanner(System.in);
-		return scanner.nextInt();
+		String input = scanner.nextLine();
+		try {
+			return Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			if (input.equals("back")) {
+				return 4;
+			}
+			else {
+				System.out.println("Invalid input.");
+			}
+		}
+		return -1; // return a default value in case of an invalid input
 	}
 
 	private void brewCoffee(int choice) {
@@ -112,6 +126,10 @@ public class CoffeeMachine {
 				break;
 			case 3:
 				this.makeCoffee(cappuccino);
+				break;
+			case 4:
+				break;
+			default:
 				break;
 		}
 	}
@@ -133,8 +151,16 @@ public class CoffeeMachine {
 			this.bean_count -= coffee.getBeans();
 			this.cup_count--;
 			this.money += coffee.getCost();
-			System.out.println("\n");
-		} else {
+
+			System.out.println("I have enough resources, making you a coffee!\n");
+		} else if (this.water_level < coffee.getWater()) {
+			System.out.println("Sorry, not enough water!");
+		} else if (this.milk_level < coffee.getMilk()) {
+			System.out.println("Sorry, not enough milk!");
+		} else if (this.bean_count < coffee.getBeans()) {
+			System.out.println("Sorry, not enough coffee beans!");
+		} else if (this.cup_count == 0) {
+			System.out.println("Sorry, not enough disposable cups!");
 
 		}
 	}
